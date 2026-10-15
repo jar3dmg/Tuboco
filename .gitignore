@@ -1,0 +1,8 @@
+# Datos locales creados por Tuboco
+storage/botanica.sqlite
+storage/botanica.sqlite-*
+storage/sessions/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
