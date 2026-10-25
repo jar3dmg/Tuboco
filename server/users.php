@@ -7,7 +7,7 @@ function currentUser(PDO $db): ?array
         return null;
     }
 
-    $query = $db->prepare('SELECT id, name, email FROM users WHERE id = ?');
+    $query = $db->prepare('SELECT id, first_name AS name, email FROM users WHERE id = ?');
     $query->execute([$_SESSION['user_id']]);
     return $query->fetch(PDO::FETCH_ASSOC) ?: null;
 }
@@ -22,7 +22,7 @@ function registerUser(PDO $db, array $data): void
         respond(['error' => 'Completa tu nombre, un correo válido y una contraseña de al menos 6 caracteres.'], 422);
     }
 
-    $query = $db->prepare('INSERT INTO users(name, email, password) VALUES (?, ?, ?)');
+    $query = $db->prepare('INSERT INTO users(first_name, email, password, created_at, updated_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)');
     $query->execute([$name, $email, password_hash($password, PASSWORD_DEFAULT)]);
     $_SESSION['user_id'] = (int) $db->lastInsertId();
     respond(['ok' => true]);

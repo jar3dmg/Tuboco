@@ -40,6 +40,10 @@ try {
         saveProfile($database, $user, $data);
     }
 
+    if ($action === 'save_preferences') {
+        saveInterfacePreferences($database, $user, $data);
+    }
+
     respond(['error' => 'Acción no encontrada.'], 404);
 } catch (PDOException $exception) {
     $message = str_contains($exception->getMessage(), 'UNIQUE')

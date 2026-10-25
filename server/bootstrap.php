@@ -23,11 +23,15 @@ function database(): PDO
         return $connection;
     }
 
-    $connection = new PDO('sqlite:' . STORAGE_PATH . '/botanica.sqlite');
+    require_once __DIR__ . '/database_config.php';
+    $config = databaseConfig();
+    $server = new PDO("mysql:host={$config['host']};port={$config['port']};charset=utf8mb4", $config['user'], $config['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+    $server->exec("CREATE DATABASE IF NOT EXISTS `{$config['name']}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+    $connection = new PDO("mysql:host={$config['host']};port={$config['port']};dbname={$config['name']};charset=utf8mb4", $config['user'], $config['password']);
     $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $connection->exec('PRAGMA foreign_keys = ON');
-    $connection->exec('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, password TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)');
-    $connection->exec('CREATE TABLE IF NOT EXISTS onboarding_profiles (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL UNIQUE, has_garden INTEGER NOT NULL DEFAULT 0, garden_plants TEXT, has_pots INTEGER NOT NULL DEFAULT 0, pot_plants TEXT, interests TEXT NOT NULL, goal TEXT NOT NULL, completed_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE)');
+    $connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    require_once __DIR__ . '/migrations.php';
+    runMigrations($connection, STORAGE_PATH . '/botanica.sqlite');
 
     return $connection;
 }

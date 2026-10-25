@@ -1,0 +1,377 @@
+
+////////////////////////////////////////////////////////////
+// BOTÁNICA CURSOS
+// MODELO RELACIONAL ORGANIZADO
+////////////////////////////////////////////////////////////
+
+
+// ========================================================
+// ENUMERACIONES
+// ========================================================
+
+Enum user_status {
+  active
+  inactive
+}
+
+Enum course_status {
+  draft
+  published
+  archived
+}
+
+Enum learning_level {
+  beginner
+  intermediate
+  advanced
+}
+
+Enum enrollment_status {
+  not_started
+  in_progress
+  paused
+  completed
+  abandoned
+}
+
+Enum block_type {
+  text
+  video
+  document
+  image
+  link
+  quiz
+  practice
+  download
+}
+
+Enum rule_action {
+  add_score
+  subtract_score
+  exclude_course
+  show_warning
+  prefer_text_content
+}
+
+
+// ========================================================
+// 01. USUARIOS Y PERFILES
+// ========================================================
+
+Table users {
+  id bigint [pk, increment]
+  first_name varchar(100) [not null]
+  paternal_last_name varchar(100)
+  maternal_last_name varchar(100)
+  email varchar(255) [not null, unique]
+  phone varchar(30)
+  password varchar(255) [not null]
+  status user_status [not null, default: 'active']
+  created_at datetime
+  updated_at datetime
+}
+
+Table user_profiles {
+  user_id bigint [pk, ref: - users.id]
+  region_id bigint [ref: > regions.id]
+  knowledge_level learning_level [not null, default: 'beginner']
+  has_pets boolean [not null, default: false]
+  weak_connection boolean [not null, default: false]
+  created_at datetime
+  updated_at datetime
+}
+
+
+// ========================================================
+// 02. CATALOGOS GENERALES
+// ========================================================
+
+Table regions {
+  id bigint [pk, increment]
+  code varchar(50) [not null, unique]
+  name varchar(150) [not null]
+  description varchar(500)
+  is_active boolean [not null, default: true]
+}
+
+Table course_categories {
+  id bigint [pk, increment]
+  parent_id bigint [ref: > course_categories.id]
+  code varchar(50) [not null, unique]
+  name varchar(150) [not null]
+  description varchar(500)
+  is_active boolean [not null, default: true]
+}
+
+Table plant_taxa {
+  id bigint [pk, increment]
+  parent_id bigint [ref: > plant_taxa.id]
+  taxon_type varchar(20) [not null, note: 'family o species']
+  code varchar(80) [not null, unique]
+  scientific_name varchar(200) [not null]
+  common_name varchar(200)
+  ecosystem varchar(100)
+  toxicity_level varchar(30) [note: 'safe, caution, toxic']
+  pet_safety_warning varchar(500)
+  is_active boolean [not null, default: true]
+}
+
+Table tag_groups {
+  id bigint [pk, increment]
+  code varchar(50) [not null, unique]
+  name varchar(100) [not null]
+  description varchar(500)
+}
+
+Table tags {
+  id bigint [pk, increment]
+  tag_group_id bigint [not null, ref: > tag_groups.id]
+  code varchar(80) [not null, unique]
+  name varchar(150) [not null]
+  description varchar(500)
+  sort_order integer [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+
+// ========================================================
+// 03. PERSONALIZACION DEL USUARIO
+// ========================================================
+
+Table user_tags {
+  user_id bigint [not null, ref: > users.id]
+  tag_id bigint [not null, ref: > tags.id]
+  priority smallint [not null, default: 3, note: 'De 1 a 5']
+  created_at datetime
+
+  indexes {
+    (user_id, tag_id) [pk]
+    (tag_id, user_id)
+  }
+}
+
+Table user_plants {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id]
+  plant_taxon_id bigint [not null, ref: > plant_taxa.id]
+  context_tag_id bigint [ref: > tags.id, note: 'Ej. CONTEXT:POT o CONTEXT:GARDEN']
+  quantity integer
+  notes varchar(1000)
+  created_at datetime
+
+  indexes {
+    (user_id, plant_taxon_id)
+  }
+}
+
+
+// ========================================================
+// 04. CURSOS Y CRITERIOS DE COINCIDENCIA
+// ========================================================
+
+Table courses {
+  id bigint [pk, increment]
+  category_id bigint [not null, ref: > course_categories.id]
+  level learning_level [not null, default: 'beginner']
+  title varchar(255) [not null]
+  slug varchar(280) [not null, unique]
+  short_description varchar(500)
+  description text
+  cover_image_url varchar(1500)
+  estimated_minutes integer
+  status course_status [not null, default: 'draft']
+  is_free boolean [not null, default: true]
+  created_at datetime
+  updated_at datetime
+  published_at datetime
+}
+
+Table course_tags {
+  course_id bigint [not null, ref: > courses.id]
+  tag_id bigint [not null, ref: > tags.id]
+  weight integer [not null, default: 0]
+  is_required boolean [not null, default: false]
+
+  indexes {
+    (course_id, tag_id) [pk]
+    (tag_id, course_id)
+  }
+}
+
+Table course_plant_taxa {
+  course_id bigint [not null, ref: > courses.id]
+  plant_taxon_id bigint [not null, ref: > plant_taxa.id]
+  weight integer [not null, default: 0]
+
+  indexes {
+    (course_id, plant_taxon_id) [pk]
+    (plant_taxon_id, course_id)
+  }
+}
+
+Table course_regions {
+  course_id bigint [not null, ref: > courses.id]
+  region_id bigint [not null, ref: > regions.id]
+  weight integer [not null, default: 0]
+
+  indexes {
+    (course_id, region_id) [pk]
+    (region_id, course_id)
+  }
+}
+
+
+// ========================================================
+// 05. CONTENIDO EDUCATIVO
+// ========================================================
+
+Table course_modules {
+  id bigint [pk, increment]
+  course_id bigint [not null, ref: > courses.id]
+  title varchar(255) [not null]
+  description text
+  position integer [not null]
+  estimated_minutes integer
+  is_required boolean [not null, default: true]
+
+  indexes {
+    (course_id, position) [unique]
+  }
+}
+
+Table lessons {
+  id bigint [pk, increment]
+  module_id bigint [not null, ref: > course_modules.id]
+  title varchar(255) [not null]
+  description text
+  position integer [not null]
+  estimated_minutes integer
+  is_required boolean [not null, default: true]
+  is_preview boolean [not null, default: false]
+
+  indexes {
+    (module_id, position) [unique]
+  }
+}
+
+Table lesson_blocks {
+  id bigint [pk, increment]
+  lesson_id bigint [not null, ref: > lessons.id]
+  type block_type [not null]
+  title varchar(255)
+  body text
+  content_data json
+  position integer [not null]
+  is_required boolean [not null, default: true]
+  low_bandwidth boolean [not null, default: false]
+
+  indexes {
+    (lesson_id, position) [unique]
+  }
+}
+
+
+// ========================================================
+// 06. INSCRIPCIONES Y PROGRESO ACADEMICO
+// ========================================================
+
+Table user_courses {
+  id bigint [pk, increment]
+  user_id bigint [not null, ref: > users.id]
+  course_id bigint [not null, ref: > courses.id]
+  status enrollment_status [not null, default: 'not_started']
+  progress_percentage decimal(5,2) [not null, default: 0]
+  final_score decimal(5,2)
+  started_at datetime
+  last_accessed_at datetime
+  completed_at datetime
+  abandoned_at datetime
+  abandonment_reason varchar(50) [note: 'lack_of_time, lack_of_interest, difficulty, other']
+  created_at datetime
+  updated_at datetime
+
+  indexes {
+    (user_id, course_id) [unique]
+    (user_id, status)
+  }
+}
+
+Table user_lesson_progress {
+  user_course_id bigint [not null, ref: > user_courses.id]
+  lesson_id bigint [not null, ref: > lessons.id]
+  progress_percentage decimal(5,2) [not null, default: 0]
+  is_completed boolean [not null, default: false]
+  score decimal(5,2)
+  last_block_id bigint [ref: > lesson_blocks.id]
+  last_position_seconds integer
+  started_at datetime
+  completed_at datetime
+  updated_at datetime
+
+  indexes {
+    (user_course_id, lesson_id) [pk]
+  }
+}
+
+Table user_block_attempts {
+  id bigint [pk, increment]
+  user_course_id bigint [not null, ref: > user_courses.id]
+  lesson_block_id bigint [not null, ref: > lesson_blocks.id]
+  attempt_number integer [not null, default: 1]
+  answer_data json [note: 'Respuestas, URL de archivos o texto de la práctica']
+  score decimal(5,2)
+  is_passed boolean
+  feedback text
+  submitted_at datetime
+
+  indexes {
+    (user_course_id, lesson_block_id, attempt_number) [unique]
+  }
+}
+
+
+// ========================================================
+// 07. MOTOR DE RECOMENDACIONES
+// ========================================================
+
+Table recommendation_rules {
+  id bigint [pk, increment]
+  name varchar(255) [not null]
+  priority integer [not null, default: 0]
+  is_active boolean [not null, default: true]
+  description varchar(1000)
+  created_at datetime
+  updated_at datetime
+}
+
+Table recommendation_rule_conditions {
+  id bigint [pk, increment]
+  rule_id bigint [not null, ref: > recommendation_rules.id]
+  attribute varchar(50) [not null]
+  operator varchar(30) [not null, note: 'equals, has_tag, has_plant, abandoned_reason']
+  value json [not null]
+}
+
+Table recommendation_rule_actions {
+  id bigint [pk, increment]
+  rule_id bigint [not null, ref: > recommendation_rules.id]
+  action rule_action [not null]
+  target_tag_id bigint [ref: > tags.id]
+  score integer [not null, default: 0]
+  message varchar(1000)
+}
+
+Table user_course_recommendations {
+  user_id bigint [not null, ref: > users.id]
+  course_id bigint [not null, ref: > courses.id]
+  score decimal(10,2) [not null, default: 0]
+  reasons json [note: 'Reglas y coincidencias aplicadas']
+  is_opened boolean [not null, default: false]
+  is_dismissed boolean [not null, default: false]
+  generated_at datetime
+
+  indexes {
+    (user_id, course_id) [pk]
+    (user_id, score)
+  }
+}
