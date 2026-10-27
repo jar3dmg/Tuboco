@@ -336,6 +336,7 @@ Table user_block_attempts {
 
 Table recommendation_rules {
   id bigint [pk, increment]
+  code varchar(120) [unique]
   name varchar(255) [not null]
   priority integer [not null, default: 0]
   is_active boolean [not null, default: true]
@@ -359,6 +360,7 @@ Table recommendation_rule_actions {
   target_tag_id bigint [ref: > tags.id]
   score integer [not null, default: 0]
   message varchar(1000)
+  action_data json [note: 'Filtros, formato, desempates y metadatos de la acción']
 }
 
 Table user_course_recommendations {

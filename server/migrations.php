@@ -8,6 +8,7 @@ function migrations(): array
         require __DIR__ . '/../database/migrations/002_mysql_schema.php',
         require __DIR__ . '/../database/migrations/003_import_sqlite_data.php',
         require __DIR__ . '/../database/migrations/004_user_interface_preferences.php',
+        require __DIR__ . '/../database/migrations/005_recommendation_rule_payloads.php',
     ];
 }
 

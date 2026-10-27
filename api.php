@@ -44,6 +44,10 @@ try {
         saveInterfacePreferences($database, $user, $data);
     }
 
+    if ($action === 'save_learning_preferences') {
+        saveLearningPreferences($database, $user, $data);
+    }
+
     respond(['error' => 'Acción no encontrada.'], 404);
 } catch (PDOException $exception) {
     $message = str_contains($exception->getMessage(), 'UNIQUE')

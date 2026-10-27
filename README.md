@@ -7,8 +7,8 @@ Plataforma de aprendizaje de botánica con registro, inicio de sesión, cuestion
 Requiere PHP 8.2 o posterior con `pdo_mysql` y MariaDB/MySQL iniciado.
 
 ```powershell
-C:\xampp-2\php\php.exe database\migrate.php
-C:\xampp-2\php\php.exe -S localhost:8000
+php.exe database\migrate.php
+php.exe -S localhost:8000
 ```
 
 Visita `http://localhost:8000`. La primera solicitud también ejecuta las migraciones pendientes.
@@ -23,6 +23,20 @@ Para aplicar y comprobar las migraciones manualmente:
 
 ```powershell
 C:\xampp-2\php\php.exe database\migrate.php
+```
+
+## Catálogos iniciales
+
+Los catálogos y reglas de Tuboco se mantienen separados del esquema en seeders idempotentes. El comando general inserta o actualiza categorías, regiones climáticas, etiquetas, taxonomía vegetal y reglas de recomendación, sin crear cursos ni alterar usuarios.
+
+```powershell
+php.exe database\seed.php
+```
+
+Para cargar la ampliación general del catálogo (más categorías, regiones, etiquetas y taxones), después del seeder inicial ejecuta:
+
+```powershell
+php.exe database\seed_extended_catalog.php
 ```
 
 Para cambios futuros, agrega una migración con una versión nueva a `database/migrations/` y regístrala en `server/migrations.php`. No modifiques una migración que ya se haya aplicado en instalaciones compartidas.
