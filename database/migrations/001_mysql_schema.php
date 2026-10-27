@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 return [
-    'version' => '002_mysql_schema',
-    'up' => static function (PDO $db, string $sqlitePath): void {
+    'version' => '001_mysql_schema',
+    'up' => static function (PDO $db): void {
         $sql = [
             "CREATE TABLE IF NOT EXISTS users (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, first_name VARCHAR(100) NOT NULL, paternal_last_name VARCHAR(100) NULL, maternal_last_name VARCHAR(100) NULL, email VARCHAR(255) NOT NULL UNIQUE, phone VARCHAR(30) NULL, password VARCHAR(255) NOT NULL, status VARCHAR(20) NOT NULL DEFAULT 'active', created_at DATETIME NULL, updated_at DATETIME NULL, CHECK (status IN ('active','inactive'))) ENGINE=InnoDB",
             "CREATE TABLE IF NOT EXISTS regions (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, code VARCHAR(50) NOT NULL UNIQUE, name VARCHAR(150) NOT NULL, description VARCHAR(500) NULL, is_active TINYINT(1) NOT NULL DEFAULT 1) ENGINE=InnoDB",

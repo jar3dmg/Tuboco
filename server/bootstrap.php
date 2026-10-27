@@ -31,7 +31,7 @@ function database(): PDO
     $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     require_once __DIR__ . '/migrations.php';
-    runMigrations($connection, STORAGE_PATH . '/botanica.sqlite');
+    runMigrations($connection);
 
     return $connection;
 }

@@ -17,7 +17,7 @@ Visita `http://localhost:8000`. La primera solicitud también ejecuta las migrac
 
 Las migraciones se registran en `schema_migrations`, así que pueden ejecutarse varias veces sin duplicar tablas ni catálogos.
 
-La base se llama `botanica_cursos` por defecto y aparecerá en phpMyAdmin. En la primera migración se importan los datos disponibles del archivo SQLite histórico, que se conserva como respaldo en `storage/`.
+La base se llama `botanica_cursos` por defecto y aparecerá en phpMyAdmin.
 
 Para aplicar y comprobar las migraciones manualmente:
 
@@ -48,7 +48,7 @@ La conexión puede configurarse mediante las variables de entorno `DB_HOST`, `DB
 ```text
 api.php                 Punto de entrada de la API
 server/
-  bootstrap.php         Sesión, SQLite y esquema de datos
+  bootstrap.php         Sesión y conexión a la base de datos
   http.php              Lectura y respuestas HTTP
   users.php             Registro, login y usuario autenticado
   profiles.php          Datos del cold start
@@ -57,7 +57,7 @@ assets/js/
   catalog.js            Catálogo y opciones del cuestionario
 app.js                  Vistas e interacciones de la interfaz
 app.css                 Estilos de Tuboco
-storage/                Base de datos y sesiones locales, ignoradas por Git
+storage/                Sesiones locales, ignoradas por Git
 ```
 
 ## Datos guardados

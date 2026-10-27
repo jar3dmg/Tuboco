@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 return [
-    'version' => '004_user_interface_preferences',
-    'up' => static function (PDO $db, string $sqlitePath): void {
+    'version' => '002_user_interface_preferences',
+    'up' => static function (PDO $db): void {
         $columns = $db->query("SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'user_profiles'")->fetchAll(PDO::FETCH_COLUMN);
         $add = [
             'theme' => "ALTER TABLE user_profiles ADD COLUMN theme VARCHAR(20) NOT NULL DEFAULT 'light'",
