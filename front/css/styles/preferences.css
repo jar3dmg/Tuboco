@@ -1,0 +1,272 @@
+﻿/* Perfil, accesibilidad y preferencias visuales. */
+
+/*
+ * Estilos globales del área privada de Tuboco.
+ * Incluye accesibilidad, autenticación, navegación, perfil, cursos y lecciones.
+ * Los estilos de la landing pública se mantienen en front/css/landing.css.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700&display=swap");
+@import url("https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/open-dyslexic-regular.css");
+html[data-font-mode="dyslexia"] body {
+  font-family: "OpenDyslexic", Arial, sans-serif !important;
+  font-size: inherit;
+  letter-spacing: 0.035em;
+  word-spacing: 0.08em;
+  line-height: 1.72;
+}
+html[data-font-size="small"] body {
+  font-size: 14px;
+}
+html[data-font-size="large"] body {
+  font-size: 18px;
+}
+
+.profile-page {
+  max-width: 76rem;
+}
+.profile-head {
+  margin-bottom: 2rem;
+}
+.profile-head h1 {
+  font-size: clamp(2rem, 4vw, 2.55rem);
+  margin: 0 0 0.35rem;
+}
+.profile-head p {
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin: 0;
+}
+.profile-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.88fr) minmax(440px, 1.25fr);
+  gap: 2rem;
+  align-items: start;
+}
+.profile-card {
+  background: var(--white);
+  border-radius: 17px;
+  padding: 1.8rem;
+  box-shadow: var(--shadow);
+}
+.profile-card h2 {
+  font-size: 1.35rem;
+  margin: 0 0 1.8rem;
+}
+.profile-card h3 {
+  font-size: 1rem;
+  margin: 0 0 0.35rem;
+}
+.account {
+  display: grid;
+  grid-template-columns: 3.6rem 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.8rem;
+}
+.avatar {
+  width: 3.6rem;
+  height: 3.6rem;
+  display: grid;
+  place-items: center;
+  background: var(--green-pale);
+  border-radius: 50%;
+  color: var(--green);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.account p,
+.setting-row p {
+  margin: 0.2rem 0;
+  color: var(--muted);
+}
+.account .secondary {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+}
+.profile-card > h3 {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 1.5rem 0;
+}
+.setting-label {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin: 1.25rem 0 0.5rem;
+}
+.selected-chip,
+.chip-list span,
+.interest-tags span {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border-radius: 99px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  font-size: 0.9rem;
+  margin: 0 0.35rem 0.45rem 0;
+}
+.selected-chip,
+.interest-tags span {
+  background: var(--green-pale);
+  border-color: transparent;
+  color: var(--green);
+  font-weight: 700;
+}
+.segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+.segmented button,
+.theme-options button {
+  background: var(--white);
+  border: 1px solid #ddd;
+  color: var(--brown);
+  padding: 0.5rem 0.9rem;
+}
+.segmented button.selected,
+.theme-options button.selected {
+  border-color: var(--green);
+  background: var(--green-pale);
+  color: var(--green);
+}
+.setting-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 1.3rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.setting-row:last-child {
+  border: 0;
+}
+.theme-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: start;
+}
+.theme-options button {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+.switch {
+  display: grid;
+  gap: 0.45rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.switch input {
+  position: absolute;
+  opacity: 0;
+}
+.switch span {
+  width: 3.2rem;
+  height: 1.75rem;
+  background: #a8b3a2;
+  border-radius: 99px;
+  position: relative;
+  transition: background 0.35s;
+}
+.switch span:after {
+  content: "";
+  position: absolute;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  background: var(--white);
+  left: 0.2rem;
+  top: 0.2rem;
+  transition: transform 0.35s;
+}
+.switch input:checked + span {
+  background: var(--green);
+}
+.switch input:checked + span:after {
+  transform: translateX(1.45rem);
+}
+html,
+body,
+.sidebar,
+.profile-card,
+.topbar,
+.course,
+.card,
+.choice,
+input,
+.secondary,
+.theme-options button,
+.segmented button {
+  transition:
+    background-color 0.38s ease,
+    color 0.38s ease,
+    border-color 0.38s ease,
+    box-shadow 0.38s ease;
+}
+html[data-theme="dark"] {
+  --cream: #182119;
+  --white: #243026;
+  --green: #a8c39a;
+  --green-pale: #344b36;
+  --brown: #f8f0df;
+  --muted: #c7cabb;
+  --line: #485849;
+  --shadow: 0 14px 35px rgba(0, 0, 0, 0.26);
+}
+html[data-theme="dark"] .selected-chip,
+html[data-theme="dark"] .interest-tags span,
+html[data-theme="dark"] .segmented button.selected,
+html[data-theme="dark"] .theme-options button.selected {
+  color: #eaf6e4;
+}
+html[data-theme="dark"] .chip-list span {
+  background: #303d31;
+  border-color: #485849;
+}
+html[data-font-size="small"] {
+  font-size: 14px;
+}
+html[data-font-size="large"] {
+  font-size: 18px;
+}
+html[data-font-mode="dyslexia"] body {
+  font-family: "OpenDyslexic", Verdana, Arial, sans-serif;
+  letter-spacing: 0.035em;
+  word-spacing: 0.08em;
+  line-height: 1.72;
+}
+html[data-font-mode="dyslexia"] h1,
+html[data-font-mode="dyslexia"] h2,
+html[data-font-mode="dyslexia"] h3 {
+  letter-spacing: 0.02em;
+}
+html.reading-mode .hero-plant,
+html.reading-mode .course-art {
+  display: none;
+}
+html.reading-mode .hero {
+  padding: 2rem;
+}
+@media (max-width: 720px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+  .setting-row {
+    grid-template-columns: 1fr;
+  }
+  .profile-card {
+    padding: 1.3rem;
+  }
+  .account {
+    grid-template-columns: 3.6rem 1fr;
+  }
+  .account .secondary {
+    grid-column: 1/-1;
+  }
+}
+
+.art .icon,
+.hero-plant .icon {
+  filter: brightness(0) saturate(100%) invert(96%) sepia(19%) saturate(603%)
+    hue-rotate(326deg) brightness(105%) contrast(101%);
+}

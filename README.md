@@ -192,10 +192,10 @@ back/
   users.php             Registro, login y usuario autenticado
   profiles.php          Datos del cold start
 front/js/
-  services/             Cliente HTTP, sesiÃ³n y operaciones de cursos
+  services/             Cliente HTTP, sesión y operaciones de cursos
   views/                Vistas de acceso, onboarding y aprendizaje
   catalog.js            Catálogo y opciones del cuestionario
-front/js/main.js        Inicio y navegaciÃ³n de la aplicaciÃ³n
+front/js/main.js        Inicio y navegación de la aplicación
 app.css                 Estilos de Tuboco
 storage/                Sesiones locales, ignoradas por Git
 ```
