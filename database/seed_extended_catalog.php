@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-require __DIR__ . '/../server/bootstrap.php';
+require __DIR__ . '/../back/bootstrap.php';
 require __DIR__ . '/seeders/ExtendedCatalogSeeder.php';
 
 $result = ExtendedCatalogSeeder::run(database());

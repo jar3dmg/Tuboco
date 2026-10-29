@@ -1,20 +1,7 @@
 <?php
 declare(strict_types=1);
 
-const STORAGE_PATH = __DIR__ . '/../storage';
-
-if (!is_dir(STORAGE_PATH)) {
-    mkdir(STORAGE_PATH, 0775, true);
-}
-
-$sessionsPath = STORAGE_PATH . '/sessions';
-if (!is_dir($sessionsPath)) {
-    mkdir($sessionsPath, 0775, true);
-}
-
-session_save_path($sessionsPath);
-session_start();
-
+/** Abre una única conexión PDO y aplica las migraciones pendientes. */
 function database(): PDO
 {
     static $connection = null;

@@ -8,9 +8,12 @@ function migrations(): array
         require __DIR__ . '/../database/migrations/001_mysql_schema.php',
         require __DIR__ . '/../database/migrations/002_user_interface_preferences.php',
         require __DIR__ . '/../database/migrations/003_recommendation_rule_payloads.php',
+        require __DIR__ . '/../database/migrations/004_learning_content_metadata.php',
+        require __DIR__ . '/../database/migrations/005_database_auth_sessions.php',
     ];
 }
 
+/** Ejecuta solo migraciones que aún no figuran en schema_migrations. */
 function runMigrations(PDO $db): void
 {
     $db->exec('CREATE TABLE IF NOT EXISTS schema_migrations (version VARCHAR(100) PRIMARY KEY, applied_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB');

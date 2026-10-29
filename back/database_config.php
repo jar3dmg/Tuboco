@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+/** Construye la configuración usando variables de entorno y valores locales seguros. */
 function databaseConfig(): array
 {
     return [

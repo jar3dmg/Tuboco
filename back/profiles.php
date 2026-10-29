@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+/** Recupera el perfil y reconstruye sus intereses a partir de etiquetas. */
 function userProfile(PDO $db, int $userId): ?array
 {
     $profileQuery = $db->prepare('SELECT knowledge_level, has_pets, weak_connection, theme, font_size, reading_mode, font_mode FROM user_profiles WHERE user_id = ?');
@@ -24,6 +25,7 @@ function userProfile(PDO $db, int $userId): ?array
     return $profile;
 }
 
+/** Valida y guarda las preferencias visuales y de accesibilidad. */
 function saveInterfacePreferences(PDO $db, array $user, array $data): void
 {
     $theme = $data['theme'] ?? 'light';
@@ -41,6 +43,7 @@ function saveInterfacePreferences(PDO $db, array $user, array $data): void
     respond(['ok' => true]);
 }
 
+/** Persiste las respuestas del cuestionario inicial como etiquetas de usuario. */
 function saveProfile(PDO $db, array $user, array $data): void
 {
     $interests = array_values(array_filter($data['interests'] ?? []));
@@ -51,7 +54,7 @@ function saveProfile(PDO $db, array $user, array $data): void
     }
 
     $userId = (int) $user['id'];
-    $profile = $db->prepare('INSERT INTO user_profiles(user_id, created_at, updated_at) VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) ON CONFLICT(user_id) DO UPDATE SET updated_at = CURRENT_TIMESTAMP');
+    $profile = $db->prepare('INSERT INTO user_profiles(user_id, created_at, updated_at) VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE updated_at = CURRENT_TIMESTAMP');
     $profile->execute([$userId]);
 
     $db->prepare("DELETE FROM user_tags WHERE user_id = ? AND tag_id IN (SELECT id FROM tags WHERE code LIKE 'interest-%' OR code LIKE 'goal-%' OR code IN ('context-garden', 'context-pot'))")->execute([$userId]);
