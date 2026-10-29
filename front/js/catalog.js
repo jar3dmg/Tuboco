@@ -12,6 +12,31 @@ export const goals = [
   "Crear un huerto",
   "Desarrollo profesional",
 ];
+export const regions = [
+  ["warm-dry", "Cálida seca"],
+  ["warm-humid", "Cálida húmeda"],
+  ["temperate-subhumid", "Templada subhúmeda"],
+  ["temperate-dry", "Templada seca"],
+  ["cold-highland", "Fría o de montaña"],
+  ["semiarid", "Semiárida"],
+  ["urban-microclimate", "Urbana con microclima"],
+];
+export const plantTypes = [
+  ["species-epipremnum-aureum", "Pothos"],
+  ["species-monstera-deliciosa", "Monstera"],
+  ["species-philodendron-hederaceum", "Filodendro corazón"],
+  ["species-dracaena-trifasciata", "Sansevieria"],
+  ["species-schlumbergera-truncata", "Cactus de Navidad"],
+  ["species-echeveria-elegans", "Echeveria"],
+  ["species-crassula-ovata", "Árbol de jade"],
+  ["species-phalaenopsis-amabilis", "Orquídea mariposa"],
+  ["species-ocimum-basilicum", "Albahaca"],
+  ["species-mentha-spicata", "Menta"],
+  ["species-salvia-rosmarinus", "Romero"],
+  ["species-solanum-lycopersicum", "Jitomate"],
+  ["species-capsicum-annuum", "Chile"],
+  ["species-chamaedorea-elegans", "Palma de salón"],
+];
 export const courses = [
   [
     "leaf",

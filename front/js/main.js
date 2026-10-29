@@ -17,7 +17,7 @@ import {
 } from "./services/course-service.js";
 import { dashboardLayout, bindDashboard } from "./views/dashboard-view.js";
 import { renderAuth } from "./views/auth-view.js";
-import { renderOnboarding } from "./views/onboarding-view.js";
+import { renderOnboarding } from "./views/onboarding-view.js?coldstart-v2";
 import {
   renderCatalog,
   renderCourse,
@@ -37,7 +37,7 @@ const state = {
   user: null,
   profile: null,
   step: 1,
-  answers: { has_garden: false, has_pots: false, interests: [], goal: "" },
+  answers: { has_garden: false, has_pots: false, interests: [], goal: "", region_code: "", has_pets: null, plant_codes: [] },
 };
 const routeNames = {
   home: "inicio",
@@ -436,7 +436,10 @@ function showOnboarding() {
       }
       if (state.step === 2) state.answers.interests = form.getAll("interest");
       if (state.step === 3) state.answers.goal = form.get("goal") || "";
-      if (state.step < 3) {
+      if (state.step === 4) state.answers.region_code = form.get("region_code") || "";
+      if (state.step === 5) state.answers.plant_codes = form.getAll("plant_code");
+      if (state.step === 6) state.answers.has_pets = form.get("has_pets") === "yes";
+      if (state.step < 6) {
         state.step++;
         showOnboarding();
         return;
